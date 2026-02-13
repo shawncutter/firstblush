@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:18110/v1";
+const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:28110/v1";
 const ACCOUNTS_KEY = "firstblush-demo-accounts";
 const ACTIVE_KEY = "firstblush-demo-active";
 

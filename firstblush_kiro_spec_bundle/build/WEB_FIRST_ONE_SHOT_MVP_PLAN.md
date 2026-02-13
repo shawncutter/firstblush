@@ -205,8 +205,8 @@ From repo root:
 docker-compose up -d --build
 ```
 Expected:
-- API: `http://localhost:8080/v1/health`
-- Web: `http://localhost:3000` (to be added in this plan)
+- API: `http://localhost:28110/v1/health`
+- Web: `http://localhost:23110`
 
 ## 11) Scope guardrails (to prevent slip)
 - No native mobile client work before web MVP done.

@@ -7,21 +7,25 @@ This is a one-shot starter service aligned to the v1 product decisions:
 - chronological feed
 - invite/approval groups
 
+Project scope and backlog are managed in:
+- `../../docs/SCOPE_AND_DECISIONS.md`
+- `../../docs/BACKLOG.md`
+
 ## Run locally
 
 From repo root:
 
 ```bash
-docker-compose up -d --build
+./scripts/dev-up.sh
 ```
 
 API base URL:
-- `http://localhost:18110/v1`
+- `http://localhost:28110/v1`
 
 Health check:
 
 ```bash
-curl http://localhost:18110/v1/health
+curl http://localhost:28110/v1/health
 ```
 
 ## Current status

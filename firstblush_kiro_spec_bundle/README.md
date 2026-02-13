@@ -1,5 +1,11 @@
 # FirstBlush Kiro-Style Spec Bundle
 
+This folder is historical planning input.
+Operational source of truth for active execution lives in:
+- `../docs/SCOPE_AND_DECISIONS.md`
+- `../docs/BACKLOG.md`
+- `../docs/AI_ENGINEERING_OPERATING_MODEL.md`
+
 This bundle contains:
 - PRD.md
 - TECH_SPEC.md
