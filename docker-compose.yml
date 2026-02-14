@@ -6,7 +6,7 @@ services:
     environment:
       VITE_API_BASE: "http://localhost:${API_HOST_PORT:-28110}/v1"
     ports:
-      - "${WEB_HOST_PORT:-23110}:3000"
+      - "${WEB_HOST_PORT:-23110}:23110"
     depends_on:
       - api
     mem_limit: 768m
@@ -18,7 +18,7 @@ services:
     container_name: firstblush-api
     environment:
       NODE_ENV: development
-      PORT: 8080
+      PORT: 28110
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/firstblush
       REDIS_URL: redis://redis:6379
       MINIO_ENDPOINT: minio
@@ -26,7 +26,7 @@ services:
       MINIO_ACCESS_KEY: firstblush
       MINIO_SECRET_KEY: firstblush123
     ports:
-      - "${API_HOST_PORT:-28110}:8080"
+      - "${API_HOST_PORT:-28110}:28110"
     depends_on:
       - postgres
       - redis

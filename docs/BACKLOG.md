@@ -28,7 +28,7 @@ Last updated: 2026-02-13
 
 | ID | Pri | Lane | Task | Status | Depends on | Acceptance criteria |
 |---|---|---|---|---|---|---|
-| FB-001 | P0 | Platform/Data | Add migration framework and baseline schema in API service | ready | None | Fresh DB migrates cleanly from zero on local compose boot |
+| FB-001 | P0 | Platform/Data | Add migration framework and baseline schema in API service | done | None | Fresh DB migrates cleanly from zero on local compose boot |
 | FB-002 | P0 | Platform/Data | Replace in-memory store with Postgres repositories | blocked | FB-001 | Core auth/profile/group/post/reaction flows persist across API restarts |
 | FB-003 | P0 | Platform/Data | Add Redis integration for cache and lightweight queue contracts | blocked | FB-002 | Redis is used for at least one production path (rate limit or queue dispatch) |
 | FB-004 | P0 | Product/API | Implement real Apple/Google token verification | ready | None | Invalid provider token rejected; valid token creates session |

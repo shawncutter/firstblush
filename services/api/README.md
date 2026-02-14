@@ -19,6 +19,12 @@ From repo root:
 ./scripts/dev-up.sh
 ```
 
+Apply migrations directly (optional manual step):
+
+```bash
+DATABASE_URL=postgres://postgres:postgres@localhost:25435/firstblush npm run db:migrate
+```
+
 API base URL:
 - `http://localhost:28110/v1`
 
@@ -45,7 +51,7 @@ Implemented:
 
 Not implemented yet:
 - Real provider token verification
-- Persistent DB integration
+- Persistent DB repositories for runtime reads/writes (migration framework is now in place)
 - MinIO upload flows
 - Advanced moderation queue actions
 - Full AI moderation/ranking providers

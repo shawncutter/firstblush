@@ -16,7 +16,7 @@ npm run dev
 ```
 
 Default URL:
-- `http://localhost:3000` (direct run)
+- `http://localhost:23110` (direct run)
 
 With Docker Compose from repo root:
 - `http://localhost:23110`
