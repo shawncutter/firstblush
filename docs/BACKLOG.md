@@ -29,16 +29,16 @@ Last updated: 2026-02-13
 | ID | Pri | Lane | Task | Status | Depends on | Acceptance criteria |
 |---|---|---|---|---|---|---|
 | FB-001 | P0 | Platform/Data | Add migration framework and baseline schema in API service | done | None | Fresh DB migrates cleanly from zero on local compose boot |
-| FB-002 | P0 | Platform/Data | Replace in-memory store with Postgres repositories | blocked | FB-001 | Core auth/profile/group/post/reaction flows persist across API restarts |
+| FB-002 | P0 | Platform/Data | Replace in-memory store with Postgres repositories | done | FB-001 | Core auth/profile/group/post/reaction flows persist across API restarts |
 | FB-003 | P0 | Platform/Data | Add Redis integration for cache and lightweight queue contracts | blocked | FB-002 | Redis is used for at least one production path (rate limit or queue dispatch) |
 | FB-004 | P0 | Product/API | Implement real Apple/Google token verification | ready | None | Invalid provider token rejected; valid token creates session |
 | FB-005 | P0 | Product/API | Session hardening (expiry, refresh, logout invariants) | blocked | FB-004 | Session behavior covered by integration tests |
-| FB-006 | P0 | Product/API | Media upload init/complete APIs with MinIO presigned URLs | ready | FB-001 | Browser uploads video and receives persisted playable URL |
-| FB-007 | P0 | Product/API | Enforce privacy/group membership checks across post/feed/reaction endpoints | ready | FB-002 | Unauthorized users cannot access restricted group content |
-| FB-008 | P0 | Product/API | Moderation queue read/action endpoints for admin workflow | ready | FB-002 | Reports are listable and state transitions are auditable |
-| FB-009 | P0 | Product/API | Safety enforcement in feed and detail views (block/mute/report parity) | ready | FB-002 | Blocked/muted users' content excluded consistently in all reads |
-| FB-010 | P0 | Product/API | Notification read-state + creator metrics correctness with persistence | blocked | FB-002 | Metrics/notifications survive restart and match data snapshots |
-| FB-011 | P0 | Product/Web | Web routes coverage for MVP (`/login`, `/feed`, `/post/[id]`, `/groups`, `/notifications`, `/settings/privacy`) | ready | FB-004, FB-007 | Full browser journey works without manual DB edits |
+| FB-006 | P0 | Product/API | Media upload init/complete APIs with MinIO presigned URLs | done | FB-001 | Browser uploads video and receives persisted playable URL |
+| FB-007 | P0 | Product/API | Enforce privacy/group membership checks across post/feed/reaction endpoints | done | FB-002 | Unauthorized users cannot access restricted group content |
+| FB-008 | P0 | Product/API | Moderation queue read/action endpoints for admin workflow | done | FB-002 | Reports are listable and state transitions are auditable |
+| FB-009 | P0 | Product/API | Safety enforcement in feed and detail views (block/mute/report parity) | done | FB-002 | Blocked/muted users' content excluded consistently in all reads |
+| FB-010 | P0 | Product/API | Notification read-state + creator metrics correctness with persistence | done | FB-002 | Metrics/notifications survive restart and match data snapshots |
+| FB-011 | P0 | Product/Web | Web routes coverage for MVP (`/login`, `/feed`, `/post/[id]`, `/groups`, `/notifications`, `/settings/privacy`) | done | FB-004, FB-007 | Full browser journey works without manual DB edits |
 | FB-012 | P1 | Product/Web | Marketing routes and early-access capture pages | ready | FB-011 | Required public pages exist and are linked in nav/footer |
 | FB-013 | P1 | Product/Web | Product UX hardening (loading/error/empty states on all critical screens) | ready | FB-011 | All critical routes show explicit state handling under API failures |
 | FB-014 | P0 | QA/Release | API integration tests for auth->post->reaction chain path | ready | FB-004, FB-006, FB-007 | CI runs and passes in clean environment |

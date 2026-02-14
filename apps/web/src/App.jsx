@@ -36,7 +36,75 @@ function initials(name) {
   return parts.map((item) => item[0]?.toUpperCase() ?? "").join("");
 }
 
+const MARKETING_ROUTES = [
+  "/",
+  "/about",
+  "/features",
+  "/how-it-works",
+  "/community",
+  "/blog",
+  "/faqs",
+  "/privacy",
+  "/terms",
+  "/contact",
+  "/early-access"
+];
+
+const PRODUCT_ROUTES = [
+  "/login",
+  "/onboarding",
+  "/feed",
+  "/post/new",
+  "/post",
+  "/reaction/new",
+  "/groups",
+  "/notifications",
+  "/settings/privacy",
+  "/creator/analytics"
+];
+
+function routeStartsWith(pathname, prefix) {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
+
 export function App() {
+  const currentPath = window.location.pathname;
+  const isMarketingRoute = MARKETING_ROUTES.includes(currentPath);
+  const isProductRoute =
+    PRODUCT_ROUTES.includes(currentPath) ||
+    routeStartsWith(currentPath, "/post/") ||
+    routeStartsWith(currentPath, "/groups/");
+
+  const marketingTitle =
+    {
+      "/": "Home",
+      "/about": "About",
+      "/features": "Features",
+      "/how-it-works": "How It Works",
+      "/community": "Community",
+      "/blog": "Blog",
+      "/faqs": "FAQs",
+      "/privacy": "Privacy",
+      "/terms": "Terms",
+      "/contact": "Contact",
+      "/early-access": "Early Access"
+    }[currentPath] ?? "FirstBlush";
+
+  const marketingDescription =
+    {
+      "/": "Reaction-first social graph for authentic video moments.",
+      "/about": "FirstBlush focuses on honest first reactions and lightweight community context.",
+      "/features": "Seed posts, reaction chains, groups, trust controls, and creator metrics.",
+      "/how-it-works": "Create a post, capture a reaction, branch a chain, and engage safely.",
+      "/community": "Join private groups with owner approval and shared norms.",
+      "/blog": "Launch notes and product updates for the web-first beta.",
+      "/faqs": "Common product, safety, and privacy questions answered.",
+      "/privacy": "Default public posting with per-post visibility and safety controls.",
+      "/terms": "Public beta terms, acceptable use, and moderation policy references.",
+      "/contact": "Reach the team for feedback, safety escalations, and partnerships.",
+      "/early-access": "Join the beta waitlist and we will send launch access updates."
+    }[currentPath] ?? "FirstBlush";
+
   const [accounts, setAccounts] = usePersistedState(ACCOUNTS_KEY, []);
   const [activeToken, setActiveToken] = usePersistedState(ACTIVE_KEY, "");
 
@@ -335,6 +403,16 @@ export function App() {
     }
   }
 
+  async function shareItem(postId) {
+    try {
+      await api(`/posts/${postId}/share`, { method: "POST" });
+      await loadDashboard();
+      setStatus("Post shared.");
+    } catch (error) {
+      setStatus(`Share failed: ${error.message}`);
+    }
+  }
+
   async function addComment(event) {
     event.preventDefault();
     if (!selectedPostId) {
@@ -411,6 +489,74 @@ export function App() {
     }
   }
 
+  if (isMarketingRoute) {
+    return (
+      <div className="shell">
+        <header className="topbar">
+          <div className="brand">
+            <span className="brand-mark">FB</span>
+            <div>
+              <h1>FirstBlush</h1>
+              <p>Web-first public beta</p>
+            </div>
+          </div>
+          <div className="topbar-controls">
+            <a href="/">Home</a>
+            <a href="/features">Features</a>
+            <a href="/how-it-works">How It Works</a>
+            <a href="/community">Community</a>
+            <a href="/early-access">Early Access</a>
+            <a href="/login">Login</a>
+            <a href="/feed">Open Product</a>
+          </div>
+        </header>
+        <section className="panel">
+          <h2>{marketingTitle}</h2>
+          <p>{marketingDescription}</p>
+          {currentPath === "/early-access" && (
+            <form
+              className="stack compact"
+              onSubmit={(event) => {
+                event.preventDefault();
+                setStatus("Early access request captured for MVP demo.");
+              }}
+            >
+              <input type="email" required placeholder="email@example.com" />
+              <input placeholder="What are you excited to use first?" />
+              <button type="submit">Join waitlist</button>
+            </form>
+          )}
+        </section>
+        <section className="panel">
+          <h3>All pages</h3>
+          <div className="row">
+            <a href="/about">About</a>
+            <a href="/blog">Blog</a>
+            <a href="/faqs">FAQs</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="/contact">Contact</a>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (!isProductRoute) {
+    return (
+      <div className="shell">
+        <section className="panel">
+          <h2>Route not found</h2>
+          <p>Use the product routes (`/login`, `/feed`, `/groups`, `/notifications`, `/settings/privacy`).</p>
+          <div className="row">
+            <a href="/feed">Open feed</a>
+            <a href="/">Back to marketing</a>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="shell">
       <header className="topbar">
@@ -423,6 +569,14 @@ export function App() {
         </div>
 
         <div className="topbar-controls">
+          <a href="/login">/login</a>
+          <a href="/onboarding">/onboarding</a>
+          <a href="/feed">/feed</a>
+          <a href="/post/new">/post/new</a>
+          <a href="/groups">/groups</a>
+          <a href="/notifications">/notifications</a>
+          <a href="/settings/privacy">/settings/privacy</a>
+          <a href="/creator/analytics">/creator/analytics</a>
           <button type="button" className="ghost" onClick={() => quickSignIn("apple", "Demo Apple")}>
             Quick Apple
           </button>
@@ -446,7 +600,9 @@ export function App() {
         </div>
       </header>
 
-      <div className="status">{message}</div>
+      <div className="status">
+        {message} <span className="meta">Route: {currentPath}</span>
+      </div>
 
       {!activeToken && (
         <section className="signin-panel">
@@ -636,6 +792,9 @@ export function App() {
                   <button type="button" className="ghost" onClick={() => toggleLike(post.id)}>
                     Like ({post.likeCount})
                   </button>
+                  <button type="button" className="ghost" onClick={() => shareItem(post.id)}>
+                    Share ({post.shareCount ?? 0})
+                  </button>
                   <button type="button" className="ghost" onClick={() => reportPost(post.id)}>
                     Report
                   </button>
@@ -732,6 +891,8 @@ export function App() {
                 <li>Reactions received: {metrics.reactionsReceived}</li>
                 <li>Likes received: {metrics.likesReceived}</li>
                 <li>Comments received: {metrics.commentsReceived}</li>
+                <li>Shares received: {metrics.sharesReceived ?? 0}</li>
+                <li>Views received: {metrics.viewsReceived ?? 0}</li>
                 <li>Followers: {metrics.followers}</li>
               </ul>
             )}

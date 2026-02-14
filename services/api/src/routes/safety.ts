@@ -1,23 +1,23 @@
 import { Router } from "express";
-import { store } from "../lib/store.js";
+import { getUserById, listSafetyEdges, upsertSafetyEdge } from "../lib/repository.js";
 
 export const safetyRouter = Router();
 
-safetyRouter.get("/safety", (req, res) => {
+safetyRouter.get("/safety", async (req, res) => {
   if (!req.actorId) {
     return res.status(401).json({ error: "Missing or invalid token" });
   }
 
-  const edges = store.getSafety(req.actorId);
+  const edges = await listSafetyEdges(req.actorId);
   return res.json({ edges });
 });
 
-safetyRouter.post("/safety/block/:userId", (req, res) => {
+safetyRouter.post("/safety/block/:userId", async (req, res) => {
   if (!req.actorId) {
     return res.status(401).json({ error: "Missing or invalid token" });
   }
 
-  const target = store.findUserById(req.params.userId);
+  const target = await getUserById(req.params.userId);
   if (!target) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -26,16 +26,16 @@ safetyRouter.post("/safety/block/:userId", (req, res) => {
     return res.status(400).json({ error: "Cannot block yourself" });
   }
 
-  const edge = store.upsertSafetyEdge(req.actorId, target.id, "block");
+  const edge = await upsertSafetyEdge(req.actorId, target.id, "block");
   return res.status(201).json({ edge });
 });
 
-safetyRouter.post("/safety/mute/:userId", (req, res) => {
+safetyRouter.post("/safety/mute/:userId", async (req, res) => {
   if (!req.actorId) {
     return res.status(401).json({ error: "Missing or invalid token" });
   }
 
-  const target = store.findUserById(req.params.userId);
+  const target = await getUserById(req.params.userId);
   if (!target) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -44,6 +44,6 @@ safetyRouter.post("/safety/mute/:userId", (req, res) => {
     return res.status(400).json({ error: "Cannot mute yourself" });
   }
 
-  const edge = store.upsertSafetyEdge(req.actorId, target.id, "mute");
+  const edge = await upsertSafetyEdge(req.actorId, target.id, "mute");
   return res.status(201).json({ edge });
 });

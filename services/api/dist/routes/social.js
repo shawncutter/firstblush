@@ -1,30 +1,24 @@
 import { Router } from "express";
-import { store } from "../lib/store.js";
+import { createNotification, followUser, getUserById, listUsers } from "../lib/repository.js";
 export const socialRouter = Router();
-socialRouter.get("/users", (_req, res) => {
-    const users = store.users.map((user) => ({
-        id: user.id,
-        displayName: user.displayName,
-        bio: user.bio,
-        interests: user.interests,
-        createdAt: user.createdAt
-    }));
+socialRouter.get("/users", async (_req, res) => {
+    const users = await listUsers();
     return res.json({ users });
 });
-socialRouter.post("/users/:id/follow", (req, res) => {
+socialRouter.post("/users/:id/follow", async (req, res) => {
     if (!req.actorId) {
         return res.status(401).json({ error: "Missing or invalid token" });
     }
-    const followee = store.findUserById(req.params.id);
+    const followee = await getUserById(req.params.id);
     if (!followee) {
         return res.status(404).json({ error: "User not found" });
     }
-    const edge = store.follow(req.actorId, followee.id);
+    const edge = await followUser(req.actorId, followee.id);
     if (!edge) {
         return res.status(400).json({ error: "Cannot follow self" });
     }
     if (followee.id !== req.actorId) {
-        store.createNotification({
+        await createNotification({
             userId: followee.id,
             type: "user_followed",
             message: "You have a new follower",

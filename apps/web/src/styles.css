@@ -86,6 +86,21 @@ textarea {
   align-items: center;
 }
 
+.topbar-controls a,
+.row a {
+  color: #d6e8ff;
+  text-decoration: none;
+  border: 1px solid rgba(214, 232, 255, 0.35);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 0.82rem;
+}
+
+.topbar-controls a:hover,
+.row a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .status {
   border: 1px solid #cdd8e7;
   background: #f7faff;
@@ -213,6 +228,12 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.row a {
+  color: #164078;
+  border-color: #b4ccea;
+  background: #eff5ff;
 }
 
 .simple-list {

@@ -1,26 +1,23 @@
 import { Router } from "express";
-import { store } from "../lib/store.js";
+import { listNotifications, markNotificationRead } from "../lib/repository.js";
 
 export const notificationsRouter = Router();
 
-notificationsRouter.get("/notifications", (req, res) => {
+notificationsRouter.get("/notifications", async (req, res) => {
   if (!req.actorId) {
     return res.status(401).json({ error: "Missing or invalid token" });
   }
 
-  const notifications = store.notifications
-    .filter((item) => item.userId === req.actorId)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-
+  const notifications = await listNotifications(req.actorId);
   return res.json({ notifications });
 });
 
-notificationsRouter.post("/notifications/:id/read", (req, res) => {
+notificationsRouter.post("/notifications/:id/read", async (req, res) => {
   if (!req.actorId) {
     return res.status(401).json({ error: "Missing or invalid token" });
   }
 
-  const notification = store.markNotificationRead(req.params.id, req.actorId);
+  const notification = await markNotificationRead(req.params.id, req.actorId);
   if (!notification) {
     return res.status(404).json({ error: "Notification not found" });
   }
